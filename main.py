@@ -18,17 +18,17 @@ class HQYJMqttClient:
         except Exception as e:
             print(e)
 
-    def on_message(self, client, userdata, message):
+    def on_message(self, message):
         msg = json.loads(message.payload.decode())
         self.mqtt_queue.put(msg)
 
     def on_connect(self, client, userdata, flags, result_code):
-        print("连接返回结果码:", result_code)
+        print("connected & return result_code:", result_code)
         self.result_code = result_code
 
 
 hqyj_mqtt_clt = HQYJMqttClient('mqtt.yyzlab.com.cn', 1883, '11111')
-hqyj_mqtt_clt.client.loop_start()
+hqyj_mqtt_clt.client.loop_start()  # open a new thread to handle the network loop
 time.sleep(3)
 if hqyj_mqtt_clt.result_code == 0:
     print('MQTT connected')
