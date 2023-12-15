@@ -1,5 +1,9 @@
 This is a python project which using ChatGPT API to deterimine to open the fan base on temperature.
 
+useful tutorial link:
+https://cookbook.openai.com/examples/assistants_api_overview_python
+https://community.openai.com/t/assistant-api-message-no-answer-only-question/534101/3
+
 environment configuration:
 Python 3.11
 conda install requests
