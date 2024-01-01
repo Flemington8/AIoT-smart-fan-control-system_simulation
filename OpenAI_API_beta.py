@@ -66,7 +66,9 @@ assistant = client.beta.assistants.create(
                    "base on given temperature to make human comfortable.",
     # error"You should only reply ON or OFF without any other words."
     # error"For example, the temperature is smaller than 10, the reply is OFF",
-    tools = [{"type": "function", "function": function_json}],
+    tools = [{"type": "code_interpreter"},
+             {"type": "retrieval"},
+             {"type": "function", "function": function_json}],
     model = "gpt-3.5-turbo-1106"
 )
 
@@ -96,14 +98,13 @@ while True:
 
         run = wait_on_run(run, thread)
 
-        # print(run)
         messages = client.beta.threads.messages.list(
             thread_id = thread.id,
             order = "asc"
         )
 
         pretty_print(messages)
-    time.sleep(2)  # make sure run.status won't be 'failed'
+    #time.sleep(1)  # make sure run.status won't be 'failed'
     # Add a new message to the thread
     run = submit_message(FAN_CONTROL_ASSISTANT_ID, thread, "The temperature is {} (in Celsius).".format(capture_temperature()))
     run = wait_on_run(run, thread)

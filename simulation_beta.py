@@ -37,9 +37,12 @@ if simulation_mqtt_client.result_code == 0:
 
 def capture_temperature():
     mqtt_data = simulation_mqtt_client.mqtt_queue.get()
-    if ('tem' in mqtt_data) and ('id' in mqtt_data) and (mqtt_data['id'] == 0):
-        print(mqtt_data['tem'])
-        return mqtt_data['tem']
+    while True:
+        if ('tem' in mqtt_data) and ('id' in mqtt_data) and (mqtt_data['id'] == 0):
+            # print(mqtt_data['tem'])
+            return mqtt_data['tem']
+        else:
+            mqtt_data = simulation_mqtt_client.mqtt_queue.get()
 
 
 def control_fan(key_status):
