@@ -1,6 +1,7 @@
-This is a python project which using ChatGPT API to deterimine to open the fan base on temperature.
+This is a python project which using ChatGPT API to determine to open the fan base on temperature.
 
 useful tutorial link:
+https://platform.openai.com/docs/assistants/tools/function-calling
 https://cookbook.openai.com/examples/assistants_api_overview_python
 https://community.openai.com/t/assistant-api-message-no-answer-only-question/534101/3
 
@@ -9,17 +10,12 @@ Python 3.11
 conda install requests
 pip install paho-mqtt
 
-parameter configuration：
-客户端数量number of clients = 10 (so that each client has 300 data)
-全局轮global epoch = 10
-本地轮local epoch = 5
-device = RTX 4060 mobile
-
-net:
-batchsize = 64
-Linear1 13 * 16
-Linear2 16 * 1
-activation function = sigmoid
-optimizer = SGD
-loss function = MSEloss reduction = 'mean'
-learning rate = 0.01
+error:
+{
+  'error': {
+    'message': "Expected tool outputs for call_ids ['call_SLVC6oRoltVMv3qbxqN8mvOy', 'call_xcDL9fuPVAJRDwkoTjv5r75A'], got ['call_SLVC6oRoltVMv3qbxqN8mvOy']",
+    'type': 'invalid_request_error',
+    'param': None,
+    'code': None
+  }
+}

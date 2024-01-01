@@ -10,11 +10,10 @@ completion = client.chat.completions.create(
     model = "gpt-3.5-turbo-16k-0613",
     messages = [
         {"role": "system", "content": "You are a helpful assistant to control the fan to regulate the indoor "
-                                      "temperature. You only need to reply 'ON' or 'OFF'."},
+                                      "temperature that make human comfortable. You only need to reply 'ON' or 'OFF'."},
         # or use regex to match 'ON' or 'OFF'
-        {"role": "user", "content": "I will give you a serial of temperature data (in Celsius). Can you help me "
-                                    "decide whether to open the fan?"},
-        {"role": "user", "content": "28"}
+        {"role": "user", "content": "The temperature is {} (in Celsius). Can you help me "
+                                    "decide whether to open the fan?".format(capture_temperature())},
     ]
 )
 
