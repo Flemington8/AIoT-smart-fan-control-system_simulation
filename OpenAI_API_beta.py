@@ -62,10 +62,10 @@ client = OpenAI(
 
 assistant = client.beta.assistants.create(
     name = "Fan Control Assistant",
-    instructions = "You are a helpful assistant to control the fan"
-                   "base on given temperature to make human comfortable.",
-    # error"You should only reply ON or OFF without any other words."
-    # error"For example, the temperature is smaller than 10, the reply is OFF",
+    # instructions = "You are a helpful assistant who regulates the indoor temperature"
+    #                "base on given temperature to make human comfortable.",
+    instructions = "You are a smart home assistant, "
+                   "and you can control the fan based on the current temperature to make the homeowner feel comfortable.",
     tools = [{"type": "code_interpreter"},
              {"type": "retrieval"},
              {"type": "function", "function": function_json}],
@@ -78,13 +78,15 @@ thread, run = create_thread_and_run("The temperature is {} (in Celsius).".format
 run = wait_on_run(run, thread)
 
 while True:
+    # time.sleep(20)  # make sure run.status won't be 'failed'
+
     tool_call = run.required_action.submit_tool_outputs.tool_calls[0]
     name = tool_call.function.name
     arguments = json.loads(tool_call.function.arguments)
 
     # The Assistants API will pause execution during a Run when it invokes functions,
     # and you can supply the results of the function call back to continue the Run execution.
-    if name == "control_fan":
+    if name == "control_fan":  # In the future, we will support more functions.
         run = client.beta.threads.runs.submit_tool_outputs(
             thread_id = thread.id,
             run_id = run.id,
@@ -104,7 +106,8 @@ while True:
         )
 
         pretty_print(messages)
-    #time.sleep(1)  # make sure run.status won't be 'failed'
+
+    time.sleep(2)  # make sure run.status won't be 'failed'
     # Add a new message to the thread
     run = submit_message(FAN_CONTROL_ASSISTANT_ID, thread, "The temperature is {} (in Celsius).".format(capture_temperature()))
     run = wait_on_run(run, thread)

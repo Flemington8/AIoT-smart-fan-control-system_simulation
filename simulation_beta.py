@@ -39,7 +39,6 @@ def capture_temperature():
     mqtt_data = simulation_mqtt_client.mqtt_queue.get()
     while True:
         if ('tem' in mqtt_data) and ('id' in mqtt_data) and (mqtt_data['id'] == 0):
-            # print(mqtt_data['tem'])
             return mqtt_data['tem']
         else:
             mqtt_data = simulation_mqtt_client.mqtt_queue.get()
