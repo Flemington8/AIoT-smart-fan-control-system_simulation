@@ -37,7 +37,11 @@ def wait_on_run(run, thread):
 
 def pretty_print(messages):
     print("# Messages")
+    count = 0
     for message in messages:
+        if message.role == "user":
+            count += 1
+            print('* conversation {}'.format(count))
         print(f"{message.role}: {message.content[0].text.value}")
 
 
@@ -62,9 +66,7 @@ client = OpenAI(
 
 assistant = client.beta.assistants.create(
     name = "Fan Control Assistant",
-    # instructions = "You are a helpful assistant who regulates the indoor temperature"
-    #                "base on given temperature to make human comfortable.",
-    instructions = "You are a smart home assistant, "
+    instructions = "You are a smart home assistant,"
                    "and you can control the fan based on the current temperature to make the homeowner feel comfortable.",
     tools = [{"type": "code_interpreter"},
              {"type": "retrieval"},
@@ -79,35 +81,37 @@ run = wait_on_run(run, thread)
 
 while True:
     # time.sleep(20)  # make sure run.status won't be 'failed'
+    try:
+        tool_call = run.required_action.submit_tool_outputs.tool_calls[0]
+        name = tool_call.function.name
+        arguments = json.loads(tool_call.function.arguments)
 
-    tool_call = run.required_action.submit_tool_outputs.tool_calls[0]
-    name = tool_call.function.name
-    arguments = json.loads(tool_call.function.arguments)
+        # The Assistants API will pause execution during a Run when it invokes functions,
+        # and you can supply the results of the function call back to continue the Run execution.
+        if name == "control_fan":  # In the future, we will support more functions.
+            run = client.beta.threads.runs.submit_tool_outputs(
+                thread_id = thread.id,
+                run_id = run.id,
+                tool_outputs = [
+                    {
+                        "tool_call_id": tool_call.id,
+                        "output": control_fan(arguments["key_status"]),
+                    }
+                ],
+            )
 
-    # The Assistants API will pause execution during a Run when it invokes functions,
-    # and you can supply the results of the function call back to continue the Run execution.
-    if name == "control_fan":  # In the future, we will support more functions.
-        run = client.beta.threads.runs.submit_tool_outputs(
-            thread_id = thread.id,
-            run_id = run.id,
-            tool_outputs = [
-                {
-                    "tool_call_id": tool_call.id,
-                    "output": control_fan(arguments["key_status"]),
-                }
-            ],
-        )
+            run = wait_on_run(run, thread)
 
+            messages = client.beta.threads.messages.list(
+                thread_id = thread.id,
+                order = "asc"
+            )
+            pretty_print(messages)
+    except Exception as e:
+        print('Exception: ', e)
+    finally:
+        print('\nwait for 20 seconds')
+        time.sleep(20)  # make sure run.status won't be 'failed', because the rate limit is 3 requests per minute.
+        # Add a new message to the thread
+        run = submit_message(FAN_CONTROL_ASSISTANT_ID, thread, "The temperature is {} (in Celsius).".format(capture_temperature()))
         run = wait_on_run(run, thread)
-
-        messages = client.beta.threads.messages.list(
-            thread_id = thread.id,
-            order = "asc"
-        )
-
-        pretty_print(messages)
-
-    #time.sleep(20)  # make sure run.status won't be 'failed'
-    # Add a new message to the thread
-    run = submit_message(FAN_CONTROL_ASSISTANT_ID, thread, "The temperature is {} (in Celsius).".format(capture_temperature()))
-    run = wait_on_run(run, thread)

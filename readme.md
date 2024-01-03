@@ -103,6 +103,12 @@ https://community.openai.com/t/expected-tool-output-for-wrong-call-id/560554
     run.status:  in_progress
 }
 
+#### solution:
+
+Sometimes the assistant will fail to run because of the rate limit. We need to wait for a while and try again.
+So, we need to add a retry mechanism to the OpenAI_API_beta.py.
+The former client_id '1111' has been occupied by the other's run, so we need to change the client_id to '111'.
+
 ## Useful Links
 https://platform.openai.com/docs/assistants/tools/function-calling
 https://cookbook.openai.com/examples/assistants_api_overview_python

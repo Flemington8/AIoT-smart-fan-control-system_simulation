@@ -27,7 +27,7 @@ class Simulation_MQTT_Client:
         self.result_code = result_code
 
 
-simulation_mqtt_client = Simulation_MQTT_Client('mqtt.yyzlab.com.cn', 1883, '11111')
+simulation_mqtt_client = Simulation_MQTT_Client('mqtt.yyzlab.com.cn', 1883, '111')
 simulation_mqtt_client.client.loop_start()  # open a new thread to handle the network loop
 time.sleep(3)
 if simulation_mqtt_client.result_code == 0:

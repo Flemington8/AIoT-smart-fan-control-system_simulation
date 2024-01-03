@@ -38,7 +38,9 @@ if hqyj_mqtt_clt.rc == 0:
     hqyj_mqtt_clt.client.subscribe('AIOTSIM2APP', qos = 0)
 
     while True:
+        print(hqyj_mqtt_clt.mqtt_queue)
         mqtt_data = hqyj_mqtt_clt.mqtt_queue.get()
+        print(mqtt_data)
         if ('tem' in mqtt_data) and ('id' in mqtt_data) and (mqtt_data['id'] == 0):
             if (float(mqtt_data["tem"])) > 8:
                 hqyj_mqtt_clt.client.publish('APP2AIOTSIM',
