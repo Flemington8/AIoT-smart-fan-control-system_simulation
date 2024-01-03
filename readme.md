@@ -25,7 +25,7 @@ Install required packages:
 
 or 
 
-* `python OpenAI_API_alpha.py`
+* `python OpenAI_API_alpha.hpy`
 
 ## Comparison between OpenAI_API_beta and OpenAI_API_alpha
 

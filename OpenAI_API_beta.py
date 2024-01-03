@@ -107,7 +107,7 @@ while True:
 
         pretty_print(messages)
 
-    time.sleep(2)  # make sure run.status won't be 'failed'
+    #time.sleep(20)  # make sure run.status won't be 'failed'
     # Add a new message to the thread
     run = submit_message(FAN_CONTROL_ASSISTANT_ID, thread, "The temperature is {} (in Celsius).".format(capture_temperature()))
     run = wait_on_run(run, thread)
