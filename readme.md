@@ -16,8 +16,9 @@ Python 3.11
 Install required packages:
 * `conda install requests`
 
-
 * `pip install paho-mqtt`
+
+* `pip install openai`
 
 ## Usage
 
