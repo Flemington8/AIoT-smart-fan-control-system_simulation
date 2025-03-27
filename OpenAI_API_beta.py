@@ -59,10 +59,7 @@ function_json = {
     }
 }
 
-client = OpenAI(
-    api_key = "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"
-    # "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"#"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"
-)
+client = OpenAI()
 
 assistant = client.beta.assistants.create(
     name = "Fan Control Assistant",
