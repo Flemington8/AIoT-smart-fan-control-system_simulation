@@ -2,10 +2,7 @@ from openai import OpenAI
 
 from simulation_beta import *
 
-client = OpenAI(
-    api_key = "sk-sDUREpSAE2dd78e5498FT3BlbKFJd29cCe5E518B4e07bF78",
-    base_url = "https://o-api-mirror01.gistmate.hash070.com/v1"
-)
+client = OpenAI()
 
 while True:
     temperature = capture_temperature()
